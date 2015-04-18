@@ -18,16 +18,12 @@ class GameScene: SKScene {
         loadGame()
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         player.tapAction()
+        for touch: AnyObject in touches {
+            
+        }
     }
-    
-//    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-//        player.tapAction()
-//        for touch: AnyObject in touches {
-//            
-//        }
-//    }
     
     override func update(currentTime: CFTimeInterval) {
         
