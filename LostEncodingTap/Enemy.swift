@@ -18,11 +18,15 @@ class Enemy : SKSpriteNode {
         name = "NPC"
         position = point
         physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: size.width, height: size.height))
-        physicsBody?.dynamic = false
+        physicsBody?.dynamic = true
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func update(){
+        physicsBody?.velocity = CGVectorMake(-100, 0)
     }
     
     func setLocation(point : CGPoint){

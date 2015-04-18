@@ -20,6 +20,7 @@ class Player : SKSpriteNode {
         physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: rectSize.width, height: rectSize.height))
         physicsBody?.dynamic = true
         physicsBody?.velocity = CGVectorMake(0, 0)
+        shadowCastBitMask = 1
     }
 
     required init?(coder aDecoder: NSCoder) {
