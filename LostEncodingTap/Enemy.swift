@@ -25,8 +25,12 @@ class Enemy : SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(){
-        physicsBody?.velocity = CGVectorMake(-100, 0)
+    func update(time : Int){
+        var mult_t = CGFloat(time)/1000
+        mult_t += 1
+        mult_t *= -100
+        physicsBody?.velocity = CGVectorMake(CGFloat(mult_t), 0)
+        println(mult_t)
     }
     
     func setLocation(point : CGPoint){

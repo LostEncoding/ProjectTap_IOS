@@ -8,29 +8,22 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     let player = Player(point: CGPoint(x: 400, y: 300))
-    let car = Enemy(point: CGPoint(x: 1000, y: 221), imageName: "car")
+    var sprites : [SKSpriteNode] = []
+    let level = [10,100,200,300]
+    var tickCount = 0
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         print("load")
+        self.physicsWorld.contactDelegate = self
         let background = SKSpriteNode(color: SKColor.lightGrayColor(), size: self.size)
         background.lightingBitMask = 1
         background.zPosition = 0
         background.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2)
         addChild(background)
-        
-        var light =  SKLightNode()
-        light.falloff = 1
-        light.categoryBitMask = 1
-        light.lightColor = UIColor(red: 1, green: 1, blue: 0, alpha: 0.5)
-        light.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
-        light.ambientColor = UIColor.whiteColor()
-        light.position = CGPointMake(700, 700)
-        addChild(light)
         addPlayer()
-        addSprite(Ground(rect: CGRectMake(0, 200, 2000, 10)))
-        addSprite(car)
+        addChild(Ground(rect: CGRectMake(0, 200, 2500, 10)))
         loadGame()
     }
     
@@ -43,7 +36,16 @@ class GameScene: SKScene {
     
     override func update(currentTime: CFTimeInterval) {
         super.update(currentTime)
-        car.update()
+        tickCount++
+        player.update()
+        for sprite in sprites {
+            (sprite as! Enemy).update(tickCount)
+        }
+        for npc in level {
+            if npc == tickCount {
+                addSprite(Enemy(point: CGPoint(x: 1000, y: 221), imageName: "car"))
+            }
+        }
     }
     
     func loadGame(){
@@ -64,5 +66,21 @@ class GameScene: SKScene {
     
     func addSprite(sprite : SKSpriteNode){
         addChild(sprite)
+        sprites.append(sprite)
+    }
+}
+
+extension GameScene {
+    func didBeginContact(contact: SKPhysicsContact) {
+        var firstBody = contact.bodyA
+        var secondBody = contact.bodyB
+        if firstBody.node?.name == "Player"{
+            if secondBody.node?.name == "NPC"{
+                println("Dead")
+            }
+            if secondBody.node?.name == "Ground"{
+                (firstBody.node as! Player).grounded = true
+            }
+        }
     }
 }

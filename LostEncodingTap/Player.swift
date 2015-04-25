@@ -11,7 +11,7 @@ import SpriteKit
 
 class Player : SKSpriteNode {
     let rectSize : CGSize = CGSize(width: 32, height: 32)
-    
+    var grounded : Bool = true
     init(point  : CGPoint){
         let sprite = SKTexture(imageNamed:"player")
         super.init(texture: sprite, color: SKColor.clearColor(), size: rectSize)
@@ -20,6 +20,7 @@ class Player : SKSpriteNode {
         physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: rectSize.width, height: rectSize.height))
         physicsBody?.dynamic = true
         physicsBody?.velocity = CGVectorMake(0, 0)
+        physicsBody?.contactTestBitMask = 1
         shadowCastBitMask = 1
     }
 
@@ -31,7 +32,17 @@ class Player : SKSpriteNode {
         position = point
     }
     
+    func update(){
+        if !grounded {
+            zRotation = CGFloat(zRotation-0.11)
+        }
+    }
+    
     func tapAction(){
+        grounded = false
         physicsBody?.velocity = CGVectorMake(0, 1000)
+    }
+    
+    func onDeath(){
     }
 }
